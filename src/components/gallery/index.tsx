@@ -1,8 +1,10 @@
-import { useState } from "react";
+import {FC, useState} from "react";
 
+interface PropsInterface {
+    photos: any[],
+}
 
-
-const Gallery = ({photos}) => {
+const Gallery: FC<PropsInterface> = ({photos}) => {
     const [size, setSize] = useState("thumb");
     const [selected, setSelected] = useState(null);
 

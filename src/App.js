@@ -4,7 +4,6 @@ import "./styles.scss";
 
 export default function App() {
 
-    return (
-            <Gallery photos={photos}/>
+    return (<Gallery photos={        photos}/>
     );
 }
