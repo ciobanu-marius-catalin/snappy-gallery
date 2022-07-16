@@ -1,5 +1,6 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { LightboxPopup } from "../lightbox-popup";
+import { Image } from "../image";
 
 interface PropsInterface {
   photos: any[];
@@ -20,8 +21,17 @@ const Gallery: FC<PropsInterface> = ({ photos }) => {
     setSelected(null);
   }, [setSelected]);
 
+  let sizes = useMemo(() => {
+    return [
+      "(min-width: 992px) 170px",
+      "(min-width: 768px) 110px",
+      "(min-width: 576px) 220px",
+      "200px",
+    ].join(",");
+  }, []);
+
   return (
-    <div className="App">
+    <div className="snappy-gallery">
       <h3>Photos courtesy of Unsplash and it's users</h3>
       <div className="container">
         <div className="row">
@@ -36,13 +46,13 @@ const Gallery: FC<PropsInterface> = ({ photos }) => {
                   selectPhoto(p);
                 }}
               >
-                <img src={p.urls[size]} alt={`Taken by ${p.user.name}`} />
+                <Image photo={p} sizes={sizes} />
               </button>
             </div>
           ))}
         </div>
       </div>
-      {selected && <LightboxPopup value={selected} onClose={closeLightbox} />}
+      {selected && <LightboxPopup photo={selected} onClose={closeLightbox} />}
     </div>
   );
 };
