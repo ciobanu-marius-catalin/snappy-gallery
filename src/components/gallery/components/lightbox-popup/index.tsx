@@ -43,7 +43,7 @@ const LightboxPopup: FC<PropsInterface> = memo(
     let sizes = useMemo(() => {
       return [
         "(min-width: 2000px) 2000px",
-        "(min-width: 768px) 1080px",
+        "(min-width: 900px) 1080px",
         "(min-width: 300px) 400px",
         "200px",
       ].join(",");
@@ -68,15 +68,10 @@ const LightboxPopup: FC<PropsInterface> = memo(
       setStartExitAnimation(true);
     };
 
-    const onAnimationEnd = (e) => {
-      console.log(e);
-      onClose();
-    };
-
     let rootAttributes = {};
     if (startExitAnimation) {
       // @ts-ignore
-      rootAttributes.onAnimationEnd = onAnimationEnd;
+      rootAttributes.onAnimationEnd = onClose;
     }
 
     return createPortal(

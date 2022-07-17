@@ -37,7 +37,7 @@ const useKeyboardNavigation = ({
       window.removeEventListener("keyup", onKeyUp);
       window.removeEventListener("scroll", onScroll, true);
     };
-  }, [onKeyUp]);
+  }, [onKeyUp, onScroll]);
 };
 
 export { useKeyboardNavigation };
