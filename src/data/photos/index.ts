@@ -5,12 +5,10 @@ import billboardPhotos from "./billboard-photos";
 import boatPhotos from "./boat-photos";
 import otherPhotos from "./other-photos";
 import { sizes } from "./sizes";
-import differentAspectRatio from "./different-aspect-ratio";
 import _ from "lodash";
 import { Photo, SrcSetType } from "./types";
 
 const photos = [
-  ...differentAspectRatio,
   ...dogPhotos,
   ...catPhotos,
   ...mountainPhotos,
