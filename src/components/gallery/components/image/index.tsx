@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { Photo } from "../../../../data/photos/types";
 
 interface ImageProps {
@@ -9,7 +9,7 @@ interface ImageProps {
 }
 
 // @ts-ignore
-const Image: FC<ImageProps> = ({
+const Image_: FC<ImageProps> = ({
   photo,
   sizes = "100vw",
   lazyLoad = false,
@@ -51,5 +51,7 @@ const Image: FC<ImageProps> = ({
     />
   );
 };
+
+const Image = memo(Image_);
 
 export { Image };

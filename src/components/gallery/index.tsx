@@ -1,4 +1,12 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  FC,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { LightboxPopup, Image } from "./components";
 import { Photo } from "../../data/photos/types";
 
@@ -6,7 +14,7 @@ interface PropsInterface {
   photos: Photo[];
 }
 
-const Gallery: FC<PropsInterface> = ({ photos }) => {
+const Gallery: FC<PropsInterface> = memo(({ photos }) => {
   const [selectedIndex, setSelectedIndex] = useState(null);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -100,6 +108,6 @@ const Gallery: FC<PropsInterface> = ({ photos }) => {
       )}
     </div>
   );
-};
+});
 
 export { Gallery };
