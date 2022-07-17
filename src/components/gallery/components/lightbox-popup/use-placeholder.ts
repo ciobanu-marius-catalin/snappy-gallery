@@ -20,22 +20,13 @@ const usePlaceholder = ({
 
   const checkTimeoutRef = useRef();
   useLayoutEffect(() => {
-    //Use a timeout to give the browser a little time by moving the code at the end of the event loop to not show the placeholder
-    //for a single frame
-    // @ts-ignore
-    checkTimeoutRef.current = setTimeout(() => {
-      let image = imageRef.current;
-      if (!image) {
-        return;
-      }
-      if (!image.complete) {
-        setShowLoader(true);
-      }
-    }, 20);
-
-    return () => {
-      clearTimeout(checkTimeoutRef.current);
-    };
+    let image = imageRef.current;
+    if (!image) {
+      return;
+    }
+    if (!image.complete) {
+      setShowLoader(true);
+    }
   }, [currentPhoto]);
 
   const onImageLoad = useCallback(() => {

@@ -57,6 +57,9 @@ const LightboxPopup: FC<PropsInterface> = memo(
 
     return createPortal(
       <div className={rootClassName}>
+        {showLoader && <ImageLoader />}
+        <Image ref={imageRef} photo={currentPhoto} sizes={sizes} />
+
         <div className="snappy-gallery-lightbox-popup__preload-container snappy-gallery-lightbox-popup">
           {previousPhoto !== null && (
             <Image
@@ -76,9 +79,6 @@ const LightboxPopup: FC<PropsInterface> = memo(
             />
           )}
         </div>
-
-        {showLoader && <ImageLoader />}
-        <Image ref={imageRef} photo={currentPhoto} sizes={sizes} />
 
         <button
           className="snappy-gallery-lightbox-popup__action-button snappy-gallery-lightbox-popup__close"
