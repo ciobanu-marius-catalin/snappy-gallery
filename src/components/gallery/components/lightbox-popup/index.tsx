@@ -5,13 +5,18 @@ import {
   MouseEvent,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import { Image } from "../image";
 import { Icon } from "../../../icon";
 import { useGetPhotosData } from "./use-get-photos-data";
 import { Photo } from "../../../../data/photos/types";
+import { ImageLoader } from "./image-loader";
+import { useKeyboardNavigation } from "./use-keyboard-navigation";
+import { usePlaceholder } from "./use-placeholder";
 
 interface PropsInterface {
   photos: Photo[];
@@ -24,41 +29,34 @@ const LightboxPopup: FC<PropsInterface> = memo(
     const { currentPhoto, previousPhoto, nextPhoto, onNext, onPrevious } =
       useGetPhotosData({ photos, selectedIndex });
 
-    const onKeyUp = useCallback(
-      (e) => {
-        let leftKeyCode = 37;
-        let rightKeyCode = 39;
-        switch (e.keyCode) {
-          case leftKeyCode:
-            onPrevious();
-            break;
-          case rightKeyCode:
-            onNext();
-            break;
-        }
-      },
-      [onNext, onPrevious]
-    );
+    useKeyboardNavigation({
+      onPrevious,
+      onNext,
+    });
 
-    useEffect(() => {
-      window.addEventListener("keyup", onKeyUp);
-
-      return () => {
-        window.removeEventListener("keyup", onKeyUp);
-      };
-    }, [onKeyUp]);
+    const { imageRef, onImageLoad, showLoader } = usePlaceholder({
+      currentPhoto,
+    });
 
     let sizes = useMemo(() => {
       return [
         "(min-width: 2000px) 2000px",
-        "(min-width: 992px) 1080px",
+        "(min-width: 768px) 1080px",
         "(min-width: 300px) 400px",
-        "80vw",
+        "200px",
       ].join(",");
     }, []);
 
+    let rootClassName = useMemo(() => {
+      let rootClassNameArray = ["snappy-gallery-lightbox-popup"];
+      if (showLoader) {
+        rootClassNameArray.push("snappy-gallery-lightbox-popup--show-loader");
+      }
+      return rootClassNameArray.join(" ");
+    }, [showLoader]);
+
     return createPortal(
-      <div className="snappy-gallery-lightbox-popup">
+      <div className={rootClassName}>
         <div className="snappy-gallery-lightbox-popup__preload-container snappy-gallery-lightbox-popup">
           {previousPhoto !== null && (
             <Image
@@ -71,6 +69,7 @@ const LightboxPopup: FC<PropsInterface> = memo(
         <div className="snappy-gallery-lightbox-popup__preload-container snappy-gallery-lightbox-popup">
           {nextPhoto && (
             <Image
+              onLoad={onImageLoad}
               photo={nextPhoto}
               sizes={sizes}
               className="snappy-gallery-lightbox-popup__next-img"
@@ -78,7 +77,8 @@ const LightboxPopup: FC<PropsInterface> = memo(
           )}
         </div>
 
-        <Image photo={currentPhoto} sizes={sizes} />
+        {showLoader && <ImageLoader />}
+        <Image ref={imageRef} photo={currentPhoto} sizes={sizes} />
 
         <button
           className="snappy-gallery-lightbox-popup__action-button snappy-gallery-lightbox-popup__close"

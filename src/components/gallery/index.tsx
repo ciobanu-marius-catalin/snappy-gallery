@@ -9,6 +9,7 @@ import {
 } from "react";
 import { LightboxPopup, Image } from "./components";
 import { Photo } from "../../data/photos/types";
+import { useLazyLoad } from "./use-lazy-load";
 
 interface PropsInterface {
   photos: Photo[];
@@ -16,8 +17,6 @@ interface PropsInterface {
 
 const Gallery: FC<PropsInterface> = memo(({ photos }) => {
   const [selectedIndex, setSelectedIndex] = useState(null);
-
-  const ref = useRef<HTMLDivElement>(null);
 
   const selectPhoto = useCallback(
     (photoIndex) => {
@@ -39,53 +38,15 @@ const Gallery: FC<PropsInterface> = memo(({ photos }) => {
     ].join(",");
   }, []);
 
-  useEffect(() => {
-    let observer = new IntersectionObserver(function (entries) {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const image = entry.target;
-
-          // @ts-ignore
-          image.src = image.dataset.src;
-          // @ts-ignore
-          image.srcset = image.dataset.srcset;
-
-          observer.unobserve(image);
-        }
-      });
-    });
-    // @ts-ignore
-    let images = ref.current?.querySelectorAll("img");
-    if (images) {
-      images.forEach((img) => observer.observe(img));
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [photos]);
+  const { containerRef } = useLazyLoad({ photos });
 
   if (photos.length === 0) {
     return null;
   }
 
-  const getImageHeightStyle = (photo) => {
-    let aspectRatio = photo?.aspectRatio;
-    if (!aspectRatio) {
-      return;
-    }
-    let paddingTop = 100 * aspectRatio;
-    let style = {
-      paddingTop: `${paddingTop}%`,
-    };
-    return {
-      style,
-    };
-  };
-
   // @ts-ignore
   return (
-    <div ref={ref} className="snappy-gallery">
+    <div ref={containerRef} className="snappy-gallery">
       <div className="container">
         <div className="snappy-gallery__row">
           {photos.map((p, index) => (
@@ -117,5 +78,19 @@ const Gallery: FC<PropsInterface> = memo(({ photos }) => {
     </div>
   );
 });
+
+const getImageHeightStyle = (photo) => {
+  let aspectRatio = photo?.aspectRatio;
+  if (!aspectRatio) {
+    return;
+  }
+  let paddingTop = 100 * aspectRatio;
+  let style = {
+    paddingTop: `${paddingTop}%`,
+  };
+  return {
+    style,
+  };
+};
 
 export { Gallery };
