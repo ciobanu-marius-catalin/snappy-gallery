@@ -34,6 +34,7 @@ const Gallery: FC<PropsInterface> = ({ photos }) => {
         <div className="row">
           {photos.map((p, index) => (
             <div
+              data-gallery-photo-id={p.id}
               className="display-flex col-lg-2 col-md-3 col-sm-6 col-12"
               key={p.id}
             >

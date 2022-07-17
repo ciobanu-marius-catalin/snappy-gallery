@@ -1,9 +1,39 @@
 import { useCallback, useMemo, useState } from "react";
+import _ from "lodash";
 
 const useGetPhotosData = ({ photos, selectedIndex }) => {
   const [internalSelectedIndex, setInternalSelectedIndex] =
     useState(selectedIndex);
   const currentPhoto = photos[internalSelectedIndex];
+
+  const updateScrollPosition = useCallback(
+    (newIndex) => {
+      let photo = _.get(photos, [newIndex]);
+      if (!photo) {
+        return;
+      }
+      let photoId = photo?.id;
+      let node = document.querySelector(`[data-gallery-photo-id="${photoId}"]`);
+      if (!node) {
+        return;
+      }
+      //only scroll if element is not in viewport
+      if (!isElementInViewport(node)) {
+        node.scrollIntoView({
+          block: "end",
+        });
+      }
+    },
+    [photos]
+  );
+
+  const setNewSelectedIndex = useCallback(
+    (newIndex) => {
+      setInternalSelectedIndex(newIndex);
+      updateScrollPosition(newIndex);
+    },
+    [setInternalSelectedIndex]
+  );
 
   const onGetPreviousIndex = useCallback(() => {
     if (photos.length < 2) {
@@ -22,8 +52,8 @@ const useGetPhotosData = ({ photos, selectedIndex }) => {
       return;
     }
 
-    setInternalSelectedIndex(previousIndex);
-  }, [onGetPreviousIndex, setInternalSelectedIndex]);
+    setNewSelectedIndex(previousIndex);
+  }, [onGetPreviousIndex, setNewSelectedIndex]);
 
   const onGetNextIndex = useCallback(() => {
     if (photos.length < 2) {
@@ -42,8 +72,8 @@ const useGetPhotosData = ({ photos, selectedIndex }) => {
       return;
     }
 
-    setInternalSelectedIndex(nextIndex);
-  }, [onGetNextIndex, setInternalSelectedIndex]);
+    setNewSelectedIndex(nextIndex);
+  }, [onGetNextIndex, setNewSelectedIndex]);
 
   const previousPhoto = useMemo(() => {
     let previousIndex = onGetPreviousIndex();
@@ -71,5 +101,20 @@ const useGetPhotosData = ({ photos, selectedIndex }) => {
     onPrevious,
   };
 };
+
+function isElementInViewport(el) {
+  let rect = el.getBoundingClientRect();
+
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <=
+      (window.innerHeight ||
+        document.documentElement.clientHeight) /* or $(window).height() */ &&
+    rect.right <=
+      (window.innerWidth ||
+        document.documentElement.clientWidth) /* or $(window).width() */
+  );
+}
 
 export { useGetPhotosData };
