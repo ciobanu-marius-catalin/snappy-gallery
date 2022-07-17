@@ -9,9 +9,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  --icons-spacing: 20px;
+  --icons-spacing: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
   img {
-    max-width: calc(100vw - 40px);
+    max-width: 100%;
     max-height: 100vh;
   }
   &__action-button {

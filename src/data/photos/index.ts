@@ -7,6 +7,7 @@ import otherPhotos from "./other-photos";
 import { sizes } from "./sizes";
 import differentAspectRatio from "./different-aspect-ratio";
 import _ from "lodash";
+import { Photo, SrcSetType } from "./types";
 
 const photos = [
   ...differentAspectRatio,
@@ -18,12 +19,16 @@ const photos = [
   ...otherPhotos,
 ];
 
-let photosWithSrcSet = photos.map((photo) => {
-  let srcSet = [];
+let photosWithSrcSet: Photo[] = photos.map((photo) => {
+  let srcSet: SrcSetType[] = [];
   _.each(sizes, (imageSize, sizeName) => {
     let srcSetSize = imageSize === "full" ? photo?.width : imageSize;
 
-    srcSet.push({ size: srcSetSize, url: _.get(photo, ["urls", sizeName]) });
+    let srcSetObj: SrcSetType = {
+      size: srcSetSize,
+      url: _.get(photo, ["urls", sizeName]),
+    };
+    srcSet.push(srcSetObj);
   });
   return {
     ...photo,

@@ -42,7 +42,6 @@ const LightboxPopup: FC<PropsInterface> = ({
     };
   }, [onKeyUp]);
 
-  let ref = useRef();
   let sizes = useMemo(() => {
     return [
       "(min-width: 2000px) 2000px",
@@ -73,7 +72,7 @@ const LightboxPopup: FC<PropsInterface> = ({
         )}
       </div>
 
-      <Image ref={ref} photo={currentPhoto} sizes={sizes} />
+      <Image photo={currentPhoto} sizes={sizes} />
 
       <button
         className="snappy-gallery-lightbox-popup__action-button snappy-gallery-lightbox-popup__close"

@@ -1,8 +1,9 @@
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LightboxPopup, Image } from "./components";
+import { Photo } from "../../data/photos/types";
 
 interface PropsInterface {
-  photos: any[];
+  photos: Photo[];
 }
 
 const Gallery: FC<PropsInterface> = ({ photos }) => {

@@ -1,10 +1,20 @@
 import { forwardRef, useMemo, useState } from "react";
+import { Photo } from "../../../../data/photos/types";
+
+interface ImageProps {
+  photo: Photo;
+  sizes: string;
+  lazyLoad: boolean;
+  [key: string]: any;
+}
 
 // @ts-ignore
-const _Image = (
-  { photo, sizes = "100vw", lazyLoad = false, ...props },
-  ref
-) => {
+const Image: FC<ImageProps> = ({
+  photo,
+  sizes = "100vw",
+  lazyLoad = false,
+  ...props
+}) => {
   const [imageLoaded, setImageLoad] = useState(false);
 
   let srcSetValue = useMemo(() => {
@@ -33,7 +43,6 @@ const _Image = (
   // @ts-ignore
   return (
     <img
-      ref={ref}
       alt={`Taken by ${photo.user.name}`}
       sizes={sizes}
       onLoad={() => setImageLoad(true)}
@@ -42,7 +51,5 @@ const _Image = (
     />
   );
 };
-
-const Image = forwardRef(_Image);
 
 export { Image };

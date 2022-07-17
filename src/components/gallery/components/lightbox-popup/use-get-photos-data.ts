@@ -1,7 +1,24 @@
 import { useCallback, useMemo, useState } from "react";
 import _ from "lodash";
+import { Photo } from "../../../../data/photos/types";
 
-const useGetPhotosData = ({ photos, selectedIndex }) => {
+interface UseGetPhotosDataInterface {
+  photos: Photo[];
+  selectedIndex: number;
+}
+
+interface PhotosData {
+  currentPhoto: Photo | null;
+  previousPhoto: Photo | null;
+  nextPhoto: Photo | null;
+  onNext: () => void;
+  onPrevious: () => void;
+}
+
+const useGetPhotosData = ({
+  photos,
+  selectedIndex,
+}: UseGetPhotosDataInterface): PhotosData => {
   const [internalSelectedIndex, setInternalSelectedIndex] =
     useState(selectedIndex);
   const currentPhoto = photos[internalSelectedIndex];
@@ -69,7 +86,7 @@ const useGetPhotosData = ({ photos, selectedIndex }) => {
     let nextIndex = onGetNextIndex();
 
     if (nextIndex === null) {
-      return;
+      return null;
     }
 
     setNewSelectedIndex(nextIndex);
@@ -79,7 +96,7 @@ const useGetPhotosData = ({ photos, selectedIndex }) => {
     let previousIndex = onGetPreviousIndex();
 
     if (previousIndex === null) {
-      return;
+      return null;
     }
 
     return photos[previousIndex];
@@ -88,7 +105,7 @@ const useGetPhotosData = ({ photos, selectedIndex }) => {
   const nextPhoto = useMemo(() => {
     let nextIndex = onGetNextIndex();
     if (nextIndex === null) {
-      return;
+      return null;
     }
     return photos[nextIndex];
   }, [onGetNextIndex, photos]);
