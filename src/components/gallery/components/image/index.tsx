@@ -1,7 +1,7 @@
 import { forwardRef, useMemo } from "react";
 
 // @ts-ignore
-const _Image = ({ photo, sizes = "100vw" }, ref) => {
+const _Image = ({ photo, sizes = "100vw", className = "" }, ref) => {
   let srcSetValue = useMemo(() => {
     return photo?.srcSet
       ?.map(({ url, size }) => {
@@ -10,6 +10,11 @@ const _Image = ({ photo, sizes = "100vw" }, ref) => {
       .join(",");
   }, [photo]);
 
+  let commonProps = {};
+  if (className) {
+    // @ts-ignore
+    commonProps.className = className;
+  }
   // @ts-ignore
   return (
     <img
@@ -18,6 +23,7 @@ const _Image = ({ photo, sizes = "100vw" }, ref) => {
       alt={`Taken by ${photo.user.name}`}
       srcSet={srcSetValue}
       sizes={sizes}
+      {...commonProps}
     />
   );
 };

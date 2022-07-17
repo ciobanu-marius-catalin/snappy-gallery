@@ -29,6 +29,6 @@ let photosWithSrcSet = photos.map((photo) => {
   };
 });
 
-photosWithSrcSet = photosWithSrcSet.filter((image, index) => index < 1);
+//photosWithSrcSet = photosWithSrcSet.filter((image, index) => index < 5);
 
 export { photos, photosWithSrcSet };

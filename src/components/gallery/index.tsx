@@ -1,25 +1,23 @@
 import { FC, useCallback, useMemo, useState } from "react";
-import { LightboxPopup } from "../lightbox-popup";
-import { Image } from "../image";
+import { LightboxPopup, Image } from "./components";
 
 interface PropsInterface {
   photos: any[];
 }
 
 const Gallery: FC<PropsInterface> = ({ photos }) => {
-  const [size, setSize] = useState("thumb");
-  const [selected, setSelected] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   const selectPhoto = useCallback(
-    (photo) => {
-      setSelected(photo);
+    (photoIndex) => {
+      setSelectedIndex(photoIndex);
     },
-    [setSelected]
+    [setSelectedIndex]
   );
 
   const closeLightbox = useCallback(() => {
-    setSelected(null);
-  }, [setSelected]);
+    setSelectedIndex(null);
+  }, [setSelectedIndex]);
 
   let sizes = useMemo(() => {
     return [
@@ -32,10 +30,9 @@ const Gallery: FC<PropsInterface> = ({ photos }) => {
 
   return (
     <div className="snappy-gallery">
-      <h3>Photos courtesy of Unsplash and it's users</h3>
       <div className="container">
         <div className="row">
-          {photos.map((p) => (
+          {photos.map((p, index) => (
             <div
               className="display-flex col-lg-2 col-md-3 col-sm-6 col-12"
               key={p.id}
@@ -43,7 +40,7 @@ const Gallery: FC<PropsInterface> = ({ photos }) => {
               <button
                 className="btn"
                 onClick={() => {
-                  selectPhoto(p);
+                  selectPhoto(index);
                 }}
               >
                 <Image photo={p} sizes={sizes} />
@@ -52,7 +49,13 @@ const Gallery: FC<PropsInterface> = ({ photos }) => {
           ))}
         </div>
       </div>
-      {selected && <LightboxPopup photo={selected} onClose={closeLightbox} />}
+      {selectedIndex !== null && (
+        <LightboxPopup
+          photos={photos}
+          selectedIndex={selectedIndex}
+          onClose={closeLightbox}
+        />
+      )}
     </div>
   );
 };
