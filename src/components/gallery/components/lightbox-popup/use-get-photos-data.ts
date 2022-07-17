@@ -8,7 +8,7 @@ interface UseGetPhotosDataInterface {
 }
 
 interface PhotosData {
-  currentPhoto: Photo | null;
+  currentPhoto: Photo;
   previousPhoto: Photo | null;
   nextPhoto: Photo | null;
   onNext: () => void;
@@ -21,7 +21,7 @@ const useGetPhotosData = ({
 }: UseGetPhotosDataInterface): PhotosData => {
   const [internalSelectedIndex, setInternalSelectedIndex] =
     useState(selectedIndex);
-  const currentPhoto = photos[internalSelectedIndex];
+  const currentPhoto: Photo = photos[internalSelectedIndex];
 
   const updateScrollPosition = useCallback(
     (newIndex) => {
@@ -49,7 +49,7 @@ const useGetPhotosData = ({
       setInternalSelectedIndex(newIndex);
       updateScrollPosition(newIndex);
     },
-    [setInternalSelectedIndex]
+    [setInternalSelectedIndex, updateScrollPosition]
   );
 
   const onGetPreviousIndex = useCallback(() => {

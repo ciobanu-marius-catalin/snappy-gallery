@@ -11,9 +11,10 @@ import {
 import { Image } from "../image";
 import { Icon } from "../../../icon";
 import { useGetPhotosData } from "./use-get-photos-data";
+import { Photo } from "../../../../data/photos/types";
 
 interface PropsInterface {
-  photos: any[];
+  photos: Photo[];
   selectedIndex: number;
   onClose: (event: MouseEvent) => void;
 }
@@ -59,7 +60,7 @@ const LightboxPopup: FC<PropsInterface> = memo(
     return createPortal(
       <div className="snappy-gallery-lightbox-popup">
         <div className="snappy-gallery-lightbox-popup__preload-container snappy-gallery-lightbox-popup">
-          {previousPhoto && (
+          {previousPhoto !== null && (
             <Image
               photo={previousPhoto}
               sizes={sizes}

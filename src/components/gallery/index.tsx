@@ -59,7 +59,15 @@ const Gallery: FC<PropsInterface> = memo(({ photos }) => {
     if (images) {
       images.forEach((img) => observer.observe(img));
     }
-  }, []);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [photos]);
+
+  if (photos.length === 0) {
+    return null;
+  }
 
   const getImageHeightStyle = (photo) => {
     let aspectRatio = photo?.aspectRatio;
