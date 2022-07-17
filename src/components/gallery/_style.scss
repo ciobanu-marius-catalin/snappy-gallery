@@ -1,4 +1,6 @@
 @import './components/style';
+@import '../../utils/mixins';
+
 .snappy-gallery {
   --gap : 10px;
   --number-columns: 1;
