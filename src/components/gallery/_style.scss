@@ -1,5 +1,24 @@
 @import './components/style';
 .snappy-gallery {
+  --gap : 10px;
+  --number-columns: 1;
+
+  @include bootstrap-sm {
+    --number-columns: 2;
+  }
+
+  @include bootstrap-md {
+    --number-columns: 4;
+  }
+  @include bootstrap-xl {
+    --number-columns: 6;
+  }
+  &__row {
+    display: grid;
+    grid-gap: var(--gap);
+    grid-auto-rows: auto;
+    grid-template-columns: repeat(var(--number-columns), 1fr);
+  }
   img {
     position: absolute;
     left: 0;

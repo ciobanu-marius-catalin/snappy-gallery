@@ -70,11 +70,11 @@ const Gallery: FC<PropsInterface> = ({ photos }) => {
   return (
     <div ref={ref} className="snappy-gallery">
       <div className="container">
-        <div className="row g-1 gy-1">
+        <div className="snappy-gallery__row">
           {photos.map((p, index) => (
             <div
               data-gallery-photo-id={p.id}
-              className="display-flex snappy-gallery__item col-lg-2 col-md-3 col-sm-6 col-12"
+              className="display-flex snappy-gallery__item"
               key={p.id}
             >
               <button
