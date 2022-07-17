@@ -21,11 +21,13 @@ import { usePlaceholder } from "./use-placeholder";
 interface PropsInterface {
   photos: Photo[];
   selectedIndex: number;
-  onClose: (event: MouseEvent) => void;
+  onClose: (event?: MouseEvent) => void;
 }
 
 const LightboxPopup: FC<PropsInterface> = memo(
   ({ photos, selectedIndex, onClose }) => {
+    const [startExitAnimation, setStartExitAnimation] = useState(false);
+
     const { currentPhoto, previousPhoto, nextPhoto, onNext, onPrevious } =
       useGetPhotosData({ photos, selectedIndex });
 
@@ -52,11 +54,33 @@ const LightboxPopup: FC<PropsInterface> = memo(
       if (showLoader) {
         rootClassNameArray.push("snappy-gallery-lightbox-popup--show-loader");
       }
+
+      if (startExitAnimation) {
+        rootClassNameArray.push(
+          "snappy-gallery-lightbox-popup--exit-animation"
+        );
+      }
+
       return rootClassNameArray.join(" ");
-    }, [showLoader]);
+    }, [showLoader, startExitAnimation]);
+
+    const onStartExitAnimation = () => {
+      setStartExitAnimation(true);
+    };
+
+    const onAnimationEnd = (e) => {
+      console.log(e);
+      onClose();
+    };
+
+    let rootAttributes = {};
+    if (startExitAnimation) {
+      // @ts-ignore
+      rootAttributes.onAnimationEnd = onAnimationEnd;
+    }
 
     return createPortal(
-      <div className={rootClassName}>
+      <div className={rootClassName} {...rootAttributes}>
         {showLoader && <ImageLoader />}
         <Image ref={imageRef} photo={currentPhoto} sizes={sizes} />
 
@@ -82,7 +106,7 @@ const LightboxPopup: FC<PropsInterface> = memo(
 
         <button
           className="snappy-gallery-lightbox-popup__action-button snappy-gallery-lightbox-popup__close"
-          onClick={onClose}
+          onClick={onStartExitAnimation}
         >
           <Icon name="times" />
         </button>

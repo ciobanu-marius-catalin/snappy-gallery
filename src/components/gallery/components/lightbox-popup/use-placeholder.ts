@@ -18,7 +18,6 @@ const usePlaceholder = ({
 
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const checkTimeoutRef = useRef();
   useLayoutEffect(() => {
     let image = imageRef.current;
     if (!image) {

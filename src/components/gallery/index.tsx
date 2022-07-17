@@ -1,12 +1,4 @@
-import {
-  FC,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { FC, memo, useCallback, useMemo, useState } from "react";
 import { LightboxPopup, Image } from "./components";
 import { Photo } from "../../data/photos/types";
 import { useLazyLoad } from "./use-lazy-load";

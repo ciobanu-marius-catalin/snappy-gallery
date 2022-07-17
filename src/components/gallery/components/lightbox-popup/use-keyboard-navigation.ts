@@ -25,11 +25,17 @@ const useKeyboardNavigation = ({
     [onNext, onPrevious]
   );
 
+  const onScroll = useCallback((e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  }, []);
+
   useEffect(() => {
     window.addEventListener("keyup", onKeyUp);
-
+    window.addEventListener("scroll", onScroll, true);
     return () => {
       window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("scroll", onScroll, true);
     };
   }, [onKeyUp]);
 };

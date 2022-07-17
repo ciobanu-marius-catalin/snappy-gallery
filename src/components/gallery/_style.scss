@@ -2,6 +2,8 @@
 .snappy-gallery {
   --gap : 10px;
   --number-columns: 1;
+  max-height: 100vh;
+  overflow: auto;
 
   @include bootstrap-sm {
     --number-columns: 2;

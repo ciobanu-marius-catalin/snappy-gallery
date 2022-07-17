@@ -4,8 +4,11 @@
   left: 0;
   bottom: 0;
   right: 0;
-  transition: transform 0.4s cubic-bezier(0, 0, 0.25, 1) 0s;
-  background: #000000;
+  //transition: transform, background-color 0.4s cubic-bezier(0, 0, 0.25, 1) 0s;
+  background-color: rgba(0,0,0, 0.8);
+  animation-name: snappy-gallery__lightbox--background-in;
+  animation-fill-mode: both;
+  animation-duration: 0.4s;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,6 +16,10 @@
   padding-left: 50px;
   padding-right: 50px;
 
+  &--exit-animation {
+    animation-name: snappy-gallery__lightbox--background-out;
+
+  }
   &--show-loader {
     img {
       opacity: 0;
@@ -60,7 +67,18 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    font-size: 50px;
     z-index: 10;
     color: white;
   }
+}
+
+@keyframes snappy-gallery__lightbox--background-in {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+
+@keyframes snappy-gallery__lightbox--background-out {
+  from {opacity: 1}
+  to {opacity: 0}
 }
