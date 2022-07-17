@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LightboxPopup, Image } from "./components";
 
 interface PropsInterface {
@@ -7,6 +7,8 @@ interface PropsInterface {
 
 const Gallery: FC<PropsInterface> = ({ photos }) => {
   const [selectedIndex, setSelectedIndex] = useState(null);
+
+  const ref = useRef<HTMLDivElement>(null);
 
   const selectPhoto = useCallback(
     (photoIndex) => {
@@ -21,21 +23,58 @@ const Gallery: FC<PropsInterface> = ({ photos }) => {
 
   let sizes = useMemo(() => {
     return [
-      "(min-width: 992px) 170px",
-      "(min-width: 768px) 110px",
-      "(min-width: 576px) 220px",
-      "200px",
+      "(min-width: 992px) 200px",
+      "(min-width: 768px) 170px",
+      "(min-width: 576px) 250px",
+      "400px",
     ].join(",");
   }, []);
 
+  useEffect(() => {
+    let observer = new IntersectionObserver(function (entries) {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const image = entry.target;
+
+          // @ts-ignore
+          image.src = image.dataset.src;
+          // @ts-ignore
+          image.srcset = image.dataset.srcset;
+
+          observer.unobserve(image);
+        }
+      });
+    });
+    // @ts-ignore
+    let images = ref.current?.querySelectorAll("img");
+    if (images) {
+      images.forEach((img) => observer.observe(img));
+    }
+  }, []);
+
+  const getImageHeightStyle = (photo) => {
+    let aspectRatio = photo?.aspectRatio;
+    if (!aspectRatio) {
+      return;
+    }
+    let paddingTop = 100 * aspectRatio;
+    let style = {
+      paddingTop: `${paddingTop}%`,
+    };
+    return {
+      style,
+    };
+  };
+
+  // @ts-ignore
   return (
-    <div className="snappy-gallery">
+    <div ref={ref} className="snappy-gallery">
       <div className="container">
-        <div className="row">
+        <div className="row g-1 gy-1">
           {photos.map((p, index) => (
             <div
               data-gallery-photo-id={p.id}
-              className="display-flex col-lg-2 col-md-3 col-sm-6 col-12"
+              className="display-flex snappy-gallery__item col-lg-2 col-md-3 col-sm-6 col-12"
               key={p.id}
             >
               <button
@@ -43,8 +82,9 @@ const Gallery: FC<PropsInterface> = ({ photos }) => {
                 onClick={() => {
                   selectPhoto(index);
                 }}
+                {...getImageHeightStyle(p)}
               >
-                <Image photo={p} sizes={sizes} />
+                <Image photo={p} sizes={sizes} lazyLoad={true} />
               </button>
             </div>
           ))}

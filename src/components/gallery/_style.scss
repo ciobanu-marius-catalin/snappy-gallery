@@ -1,6 +1,35 @@
 @import './components/style';
 .snappy-gallery {
   img {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    width: 100%;
     max-width: 100%;
+    opacity: 0;
+    transform: scale(0.5);
+    transition-duration: 0.35s;
+    transition-property:opacity, transform;
+    transform-origin: center top;
+    &[data-loaded] {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  &__item {
+    gap: 5px;
+    button {
+      position: relative;
+      height: 0;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      //background: #ccc;
+      //&:hover {
+      //  background: #ccc;
+      //}
+    }
   }
 }

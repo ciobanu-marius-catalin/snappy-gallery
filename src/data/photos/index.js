@@ -5,9 +5,11 @@ import billboardPhotos from "./billboard-photos";
 import boatPhotos from "./boat-photos";
 import otherPhotos from "./other-photos";
 import { sizes } from "./sizes";
+import differentAspectRatio from "./different-aspect-ratio";
 import _ from "lodash";
 
 const photos = [
+  ...differentAspectRatio,
   ...dogPhotos,
   ...catPhotos,
   ...mountainPhotos,
@@ -25,6 +27,7 @@ let photosWithSrcSet = photos.map((photo) => {
   });
   return {
     ...photo,
+    aspectRatio: photo?.height / photo?.width,
     srcSet,
   };
 });

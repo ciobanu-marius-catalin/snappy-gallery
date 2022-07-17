@@ -1,7 +1,12 @@
-import { forwardRef, useMemo } from "react";
+import { forwardRef, useMemo, useState } from "react";
 
 // @ts-ignore
-const _Image = ({ photo, sizes = "100vw", className = "" }, ref) => {
+const _Image = (
+  { photo, sizes = "100vw", lazyLoad = false, ...props },
+  ref
+) => {
+  const [imageLoaded, setImageLoad] = useState(false);
+
   let srcSetValue = useMemo(() => {
     return photo?.srcSet
       ?.map(({ url, size }) => {
@@ -10,20 +15,30 @@ const _Image = ({ photo, sizes = "100vw", className = "" }, ref) => {
       .join(",");
   }, [photo]);
 
-  let commonProps = {};
-  if (className) {
+  let commonProps = {
+    src: photo.urls["regular"],
+    srcSet: srcSetValue,
+  };
+  if (imageLoaded) {
+    commonProps["data-loaded"] = true;
+  }
+  if (lazyLoad) {
+    commonProps["data-src"] = commonProps.src;
     // @ts-ignore
-    commonProps.className = className;
+    delete commonProps.src;
+
+    commonProps["data-srcset"] = commonProps.srcSet;
+    delete commonProps.srcSet;
   }
   // @ts-ignore
   return (
     <img
       ref={ref}
-      src={photo.urls["regular"]}
       alt={`Taken by ${photo.user.name}`}
-      srcSet={srcSetValue}
       sizes={sizes}
+      onLoad={() => setImageLoad(true)}
       {...commonProps}
+      {...props}
     />
   );
 };
