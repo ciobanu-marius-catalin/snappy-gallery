@@ -43,7 +43,7 @@ const LightboxPopup: FC<PropsInterface> = memo(
     let sizes = useMemo(() => {
       return [
         "(min-width: 2000px) 2000px",
-        "(min-width: 900px) 1080px",
+        "(min-width: 768px) 1080px",
         "(min-width: 300px) 400px",
         "200px",
       ].join(",");
